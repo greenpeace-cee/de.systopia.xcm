@@ -22,7 +22,7 @@
     <ver>4.7</ver>
     <ver>5.0</ver>
   </compatibility>
-  <comments></comments>
+  <comments/>
   <civix>
     <namespace>CRM/Xcm</namespace>
   </civix>
