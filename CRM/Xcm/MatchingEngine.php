@@ -457,15 +457,18 @@ class CRM_Xcm_MatchingEngine {
     $contact_id = (int) $contact_id;
     $tag_id = (int) $tag_id;
     if ($contact_id && $tag_id) {
-      try {
-        $is_tagged = civicrm_api3('EntityTag', 'getcount', ['entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact']);
-        if (!$is_tagged) {
-          civicrm_api3('EntityTag', 'create', ['entity_id' => $contact_id, 'tag_id' => $tag_id, 'entity_table' => 'civicrm_contact']);
-        }
-      } catch (Exception $ex) {
-        // tag probably already exists with the contact, or contact doesn't exist
-        //  no need to worry.
-      }
+      $results = \Civi\Api4\EntityTag::save(FALSE)
+        ->addRecord([
+          'entity_id'    => $contact_id,
+          'entity_table' => 'civicrm_contact',
+          'tag_id'       => $tag_id,
+        ])
+        ->setMatch([
+          'entity_id',
+          'entity_table',
+          'tag_id',
+        ])
+        ->execute();
     }
   }
 
